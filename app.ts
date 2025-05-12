@@ -25,7 +25,7 @@ app.use('/api', tokenRouter)
 app.use('/api', rolesRouter)
 app.use('/api', actionsRouter)
 app.use('/api', roleActionsRouter)
-app.use('/api', linksRouter)
+app.use('/', linksRouter)
 
 pool.query('SELECT NOW()', async (err, res) => {
     if (err) {

@@ -6,11 +6,13 @@ import {
     getLinks,
     patchLinks,
     postLinks,
+    redirect,
 } from './links.contoller'
 import checkActionRole from '../../middleware/check-action-role'
 
 const router = Router()
 
+const queryIdUser = param('idUser').isInt({ min: 1 })
 const queryCustomUrl = param('customUrl')
     .isString()
     .isLength({ min: 2, max: 50 })
@@ -21,16 +23,18 @@ const bodyNewCustomUrl = body('newCustomUrl')
     .isString()
     .isLength({ min: 2, max: 50 })
 
-router.get('/links/', [checkActionRole(['auth-token', 'token'])], getLinks)
+router.get('/l/:idUser/:customUrl', [queryIdUser, queryCustomUrl], redirect)
+
+router.get('/api/links/', [checkActionRole(['auth-token', 'token'])], getLinks)
 
 router.get(
-    '/links/:customUrl',
+    '/api/links/:customUrl',
     [queryCustomUrl, checkActionRole(['auth-token', 'token'])],
     getLink,
 )
 
 router.post(
-    '/links/',
+    '/api/links/',
     [
         checkActionRole(['auth-token', 'token']),
         bodyDescription,
@@ -41,7 +45,7 @@ router.post(
 )
 
 router.put(
-    '/links/:customUrl',
+    '/api/links/:customUrl',
     [
         queryCustomUrl,
         bodyDescription,
@@ -53,7 +57,7 @@ router.put(
 )
 
 router.delete(
-    '/links/:customUrl',
+    '/api/links/:customUrl',
     [queryCustomUrl, checkActionRole(['auth-token', 'token'])],
     deleteLinks,
 )

@@ -6,6 +6,7 @@ import tokenRouter from './controller/token/token.router'
 import rolesRouter from './controller/role/role.router'
 import actionsRouter from './controller/actons/actons.router'
 import roleActionsRouter from './controller/role_actions/role_actions.router'
+import linksRouter from './controller/links/links.router'
 import pool from './config/prosgres'
 import redis from './config/redis'
 import createTable from './migrations/createTable'
@@ -24,6 +25,7 @@ app.use('/api', tokenRouter)
 app.use('/api', rolesRouter)
 app.use('/api', actionsRouter)
 app.use('/api', roleActionsRouter)
+app.use('/api', linksRouter)
 
 pool.query('SELECT NOW()', async (err, res) => {
     if (err) {

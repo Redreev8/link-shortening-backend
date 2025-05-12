@@ -7,6 +7,7 @@ export const sqls: { [key: string]: string } = {
     actions: 'create-actions',
     role_actions: 'create-role-action',
     users: 'create-users',
+    links: 'create-links',
 }
 
 export const sqlsKey = Object.keys(sqls).reduce(

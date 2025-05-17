@@ -8,6 +8,7 @@ import {
     removeLink,
 } from './links.model'
 import getTokenToUserData from './helper/get-token-to-user-data'
+import LinkDtoDefault from './links.dto'
 
 export const redirect = async (
     req: Request,
@@ -54,8 +55,8 @@ export const getLinks = async (
         }
         const user = await getTokenToUserData(req, res)
         if (!user) return
-        const Links = await findLinks(user.id)
-        res.json(Links)
+        const links = await findLinks(user.id)
+        res.json(links.map((l) => LinkDtoDefault(l)))
         return
     } catch (e) {
         console.log(e)
@@ -83,7 +84,7 @@ export const getLink = async (
             res.status(404).json({})
             return
         }
-        res.json(link)
+        res.json(LinkDtoDefault(link))
         return
     } catch (e) {
         console.log(e)
@@ -112,7 +113,7 @@ export const postLinks = async (
             customUrl,
             user_id: user.id,
         })
-        res.json(link)
+        res.json(LinkDtoDefault(link))
         return
     } catch (e) {
         console.log(e)
@@ -133,7 +134,7 @@ export const patchLinks = async (
             return
         }
         const { customUrl } = req.params
-        const { description, url, newCustomUrl } = req.body
+        const { description, url, newcustomUrl } = req.body
         const user = await getTokenToUserData(req, res)
         if (!user) return
         const link = await changeLink({
@@ -141,13 +142,13 @@ export const patchLinks = async (
             customUrl,
             description,
             url,
-            newCustomUrl,
+            newcustomUrl,
         })
         if (!link) {
             res.status(404).json({})
             return
         }
-        res.json(link)
+        res.json(LinkDtoDefault(link))
         return
     } catch (e) {
         console.log(e)
@@ -175,7 +176,7 @@ export const deleteLinks = async (
             res.status(404).json({})
             return
         }
-        res.json(link)
+        res.json(LinkDtoDefault(link))
         return
     } catch (e) {
         console.log(e)

@@ -1,9 +1,23 @@
 import { Router } from 'express'
-import { register, login, logut, putChangeRoleUser } from './users.controller'
-import { body } from 'express-validator'
+import {
+    register,
+    login,
+    logut,
+    putChangeRoleUser,
+    getUserData,
+} from './users.controller'
+import { body, header } from 'express-validator'
 import checkActionRole from '../../middleware/check-action-role'
 
 const router = Router()
+
+export const headerToken = header('auth-token').isString().isLength({ min: 70 })
+
+router.get(
+    '/user/',
+    [headerToken, checkActionRole(['auth-token'])],
+    getUserData,
+)
 
 router.post(
     '/register/',

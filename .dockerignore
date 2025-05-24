@@ -1,0 +1,9 @@
+./volumes
+./node_modules
+README.md
+eslint.config.mjs
+.prettierignore
+.gitignore
+.git
+Dockerfile
+docker-compose.yml

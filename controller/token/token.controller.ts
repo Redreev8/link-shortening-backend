@@ -2,6 +2,8 @@ import { validationResult } from 'express-validator'
 import { findToken, createToken, findPayloadToken } from './token.model'
 import { Request, Response } from 'express'
 import { User } from '../users/users.model'
+import { DatabaseError } from 'pg'
+import errorsRequest from '../../helper/errors-request'
 
 export const getCheckToken = async (
     req: Request,
@@ -19,8 +21,13 @@ export const getCheckToken = async (
         res.status(isTokenValid ? 200 : 404).json(isTokenValid)
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 
@@ -43,8 +50,13 @@ export const getPayloadToken = async (
         res.json(result)
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 
@@ -72,7 +84,12 @@ export const postCreateToken = async (
         res.json(result)
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }

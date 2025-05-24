@@ -50,15 +50,16 @@ export const changeLink = async ({
     description,
     url,
     customUrl,
-    newcustomUrl,
+    newCustomUrl,
     user_id,
-}: Link & { newcustomUrl: string; user_id: number }): Promise<LinkSql> => {
+}: Link & { newCustomUrl: string; user_id: number }): Promise<LinkSql> => {
+    console.log({ description, url, customUrl, newCustomUrl, user_id })
     const result = await pool.query<LinkSql>(
         `UPDATE ${nameTableLinks}
         SET description = $1, url = $2, customUrl = $4
         WHERE user_id = $5 AND customUrl = $3
         RETURNING *`,
-        [description, url, customUrl, newcustomUrl, user_id],
+        [description, url, customUrl, newCustomUrl, user_id],
     )
     return result.rows[0]
 }

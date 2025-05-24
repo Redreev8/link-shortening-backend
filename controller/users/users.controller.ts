@@ -1,10 +1,46 @@
 import { Request, Response } from 'express'
-import { changeRoleUser, createUsers, findUser } from './users.model'
+import { changeRoleUser, createUsers, findUser, User } from './users.model'
 import { validationResult } from 'express-validator'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { createToken, findTokensValue, removeToken } from '../token/token.model'
+import {
+    createToken,
+    findPayloadToken,
+    findTokensValue,
+    removeToken,
+} from '../token/token.model'
 import { getPayloadUser } from './user.dto'
+import { DatabaseError } from 'pg'
+import errorsRequest from '../../helper/errors-request'
+
+export const getUserData = async (
+    req: Request,
+    res: Response,
+): Promise<undefined> => {
+    try {
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            res.status(400).json({
+                message: 'Имя или пороль не валидны',
+                ...errors,
+                body: req.body,
+            })
+            return
+        }
+        const token = req.get('auth-token')
+        const payload = (await findPayloadToken(token!)) as User
+        res.json({ name: payload.name, id: payload.id })
+        return
+    } catch (e) {
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
+    }
+}
 
 export const register = async (
     req: Request,
@@ -34,8 +70,13 @@ export const register = async (
         res.json(token)
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 
@@ -70,8 +111,13 @@ export const login = async (
         res.json(token)
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 
@@ -96,8 +142,13 @@ export const putChangeRoleUser = async (
         res.json(newRoleId)
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 
@@ -127,7 +178,12 @@ export const logut = async (
         res.json()
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }

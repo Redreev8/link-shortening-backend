@@ -7,6 +7,8 @@ import {
     finRoles,
     removeRole,
 } from './role.model'
+import { DatabaseError } from 'pg'
+import errorsRequest from '../../helper/errors-request'
 
 export const getRoles = async (
     req: Request,
@@ -25,8 +27,13 @@ export const getRoles = async (
         res.json(roles)
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 export const getRole = async (
@@ -51,8 +58,13 @@ export const getRole = async (
         res.json(role)
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 export const postRole = async (
@@ -73,8 +85,13 @@ export const postRole = async (
         res.json(role)
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 export const patchRole = async (
@@ -100,8 +117,13 @@ export const patchRole = async (
         res.json(role)
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 export const deleteRole = async (
@@ -126,7 +148,12 @@ export const deleteRole = async (
         res.json(role)
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }

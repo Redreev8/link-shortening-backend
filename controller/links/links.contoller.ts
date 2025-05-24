@@ -9,6 +9,8 @@ import {
 } from './links.model'
 import getTokenToUserData from './helper/get-token-to-user-data'
 import LinkDtoDefault from './links.dto'
+import errorsRequest from '../../helper/errors-request'
+import { DatabaseError } from 'pg'
 
 export const redirect = async (
     req: Request,
@@ -35,8 +37,13 @@ export const redirect = async (
         res.end()
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 
@@ -59,8 +66,13 @@ export const getLinks = async (
         res.json(links.map((l) => LinkDtoDefault(l)))
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 export const getLink = async (
@@ -87,8 +99,13 @@ export const getLink = async (
         res.json(LinkDtoDefault(link))
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 export const postLinks = async (
@@ -116,8 +133,13 @@ export const postLinks = async (
         res.json(LinkDtoDefault(link))
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 export const patchLinks = async (
@@ -134,7 +156,7 @@ export const patchLinks = async (
             return
         }
         const { customUrl } = req.params
-        const { description, url, newcustomUrl } = req.body
+        const { description, url, newCustomUrl } = req.body
         const user = await getTokenToUserData(req, res)
         if (!user) return
         const link = await changeLink({
@@ -142,7 +164,7 @@ export const patchLinks = async (
             customUrl,
             description,
             url,
-            newcustomUrl,
+            newCustomUrl,
         })
         if (!link) {
             res.status(404).json({})
@@ -151,8 +173,13 @@ export const patchLinks = async (
         res.json(LinkDtoDefault(link))
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 export const deleteLinks = async (
@@ -179,7 +206,12 @@ export const deleteLinks = async (
         res.json(LinkDtoDefault(link))
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }

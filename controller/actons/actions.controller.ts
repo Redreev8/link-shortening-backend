@@ -7,6 +7,8 @@ import {
     createAction,
     changeAction,
 } from './actons.model'
+import { DatabaseError } from 'pg'
+import errorsRequest from '../../helper/errors-request'
 
 export const getActions = async (
     req: Request,
@@ -25,8 +27,13 @@ export const getActions = async (
         res.json(result)
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 export const getAction = async (
@@ -47,8 +54,13 @@ export const getAction = async (
         res.json(result)
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 export const postAction = async (
@@ -69,8 +81,13 @@ export const postAction = async (
         res.json(result)
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 export const patchAction = async (
@@ -92,8 +109,13 @@ export const patchAction = async (
         res.json(result)
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }
 export const deleteAction = async (
@@ -114,7 +136,12 @@ export const deleteAction = async (
         res.json(result)
         return
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Что пошло не так', erors: e })
+        const error = e as DatabaseError
+        console.error(error)
+        if (!error?.code || !errorsRequest[error.code]) {
+            errorsRequest.default(res, error)
+            return
+        }
+        errorsRequest[error.code](res, error)
     }
 }

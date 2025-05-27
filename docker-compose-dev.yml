@@ -1,29 +1,13 @@
 services:
-  app:
-    image: link-shortening-backen
-    container_name: link-shortening-backen_container
-    build: .
-    env_file: .env
-    stdin_open: true
-    tty: true
-    depends_on:
-      - redis
-      - postgres
-    environment:
-      - POSTGRES_USER=$DB_USER
-      - POSTGRES_PASSWORD=$DB_PASSWORD
-      - POSTGRES_DB=$DB_NAME
-    restart: unless-stopped
-    ports:
-      - '3000:3000'
   postgres:
     image: postgres
     container_name: postgres_container
-    env_file: .env
     environment:
-      POSTGRES_USER: $DB_USER
-      POSTGRES_PASSWORD: $DB_PASSWORD
-      POSTGRES_DB: $DB_NAME
+      - DB_HOST=postgresdb
+      - DB_USER=$DB_USER
+      - DB_PASSWORD=$DB_PASSWORD
+      - DB_NAME=$DB_NAME
+      - DB_PORT=$DB_PORT
     ports:
       - "5432:5432"
     volumes:
@@ -31,10 +15,8 @@ services:
     restart: unless-stopped
   redis:
       image: redis
-      container_name: redis_container
+      container_name: redis
       hostname: redis
-      volumes:
-        - ./volumes/redisdata:/data
       environment:
           - ALLOW_EMPTY_PASSWORD=yes
       ports:
@@ -42,7 +24,7 @@ services:
   redis-commander:
       depends_on:
           - redis
-      container_name: redis-commander_container
+      container_name: redis-commander
       hostname: redis-commander
       image: rediscommander/redis-commander:latest
       restart: always
@@ -53,6 +35,4 @@ services:
 
 volumes:
   pgdata:
-    driver: local
-  redisdata:
     driver: local

@@ -14,7 +14,7 @@ const router = Router()
 const queryId = param('id').isInt({ min: 1 })
 const bodyAction = body('action', '').isString().isLength({ min: 2, max: 100 })
 
-router.get('/actions/', [checkActionRole(['auth-token', 'token'])], getActions)
+router.get('/actions/', getActions)
 router.get(
     '/actions/:id',
     [queryId, checkActionRole(['auth-token', 'token'])],

@@ -9,8 +9,7 @@ import roleActionsRouter from './controller/role_actions/role_actions.router'
 import linksRouter from './controller/links/links.router'
 import pool from './config/prosgres'
 import redis from './config/redis'
-import createTable from './migrations/createTable'
-import createFerstUser from './helper/create-ferst-user'
+import connectionCheckPg from './helper/connection-check-pg'
 
 dotenv.config()
 
@@ -27,15 +26,7 @@ app.use('/api', actionsRouter)
 app.use('/api', roleActionsRouter)
 app.use('/', linksRouter)
 
-pool.query('SELECT NOW()', async (err, res) => {
-    if (err) {
-        console.error('Error connecting to the database', err.stack)
-        return
-    }
-    await createTable()
-    await createFerstUser()
-    console.log('Connected to the database:', res.rows)
-})
+pool.query('SELECT NOW()', connectionCheckPg)
 
 redis.on('error', (err) => console.log('Redis Client Error', err))
 redis.on('connect', () => console.log('Redis Client Connected'))

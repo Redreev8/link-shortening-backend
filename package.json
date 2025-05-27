@@ -6,12 +6,13 @@
   "scripts": {
     "prettier": "prettier --write \"**/*.ts\"",
     "lint": "eslint .",
-    "build": "babel ./ --out-dir dist --extensions .ts --source-maps",
+    "build": "babel ./ --out-dir dist --extensions .ts",
     "build:types": "tsc",
-    "dev": "npx ts-node app.ts",
+    "dev": "npx ts-node app.ts --dev",
     "start": "node ./dist/app.js",
     "drop": "npx ts-node ./migrations/dropTable.ts",
-    "docker-compose": "docker-compose up"
+    "docker-compose-dev": "docker-compose -f docker-compose-dev.yml up",
+    "docker-compose": "docker-compose up -d --build"
   },
   "author": "",
   "license": "ISC",

@@ -1,5 +1,5 @@
 [build]
-  ignore = 'exit 0'
+  ignore = "exit 0"
 
 [dev]
   command="npm run dev"

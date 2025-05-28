@@ -2,6 +2,6 @@ import { createClient } from 'redis'
 
 const isDev = process.argv.includes('--dev')
 
-const redis = createClient(isDev ? {} : { url: 'redis://redis:6379' })
+const redis = createClient(isDev ? {} : { url: process.env.REDIS_URL })
 
 export default redis

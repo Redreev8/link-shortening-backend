@@ -1,0 +1,1 @@
+{"version":3,"file":"links.dto.js","sourceRoot":"","sources":["../../../controller/links/links.dto.ts"],"names":[],"mappings":";;AAQA,IAAM,cAAc,GAAG,UAAC,CAAU,IAAW,OAAA,CAAC;IAC1C,WAAW,EAAE,CAAC,CAAC,WAAW;IAC1B,GAAG,EAAE,CAAC,CAAC,GAAG;IACV,SAAS,EAAE,CAAC,CAAC,SAAS;CACzB,CAAC,EAJ2C,CAI3C,CAAA;AAEF,kBAAe,cAAc,CAAA"}

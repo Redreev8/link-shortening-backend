@@ -3,7 +3,9 @@
       	"esModuleInterop": true,
 		"moduleResolution": "Node",
       	"downlevelIteration": true,
-        "strict": true,
+        "strict": true, 
+        "sourceMap": true,
+        "outDir": "dist",
         "skipLibCheck": true
     },
     "include": ["./**/*.ts"],

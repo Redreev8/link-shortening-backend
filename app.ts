@@ -17,7 +17,9 @@ const app = express()
 const PORT = process.env.PORT || 3000
 
 app.use(express.json())
-app.use(cors())
+app.use(cors({ 
+   origin : ['http://.........'], 
+}))
 
 app.use('/api', userRouter)
 app.use('/api', tokenRouter)

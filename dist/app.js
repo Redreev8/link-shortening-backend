@@ -30,6 +30,9 @@ prosgres_1.default.query('SELECT NOW()', connection_check_pg_1.default);
 redis_1.default.on('error', function (err) { return console.log('Redis Client Error', err); });
 redis_1.default.on('connect', function () { return console.log('Redis Client Connected'); });
 redis_1.default.connect();
+app.get('/', function (_req, res) {
+    return res.send('Express Typescript on Vercel');
+});
 app.listen(PORT, function () {
     console.log("Server running on port ".concat(PORT));
 });

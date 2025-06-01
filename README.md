@@ -9,7 +9,6 @@
 -   jwt
 -   eslint
 -   prettier
--   babel
 
 ## comands
 
